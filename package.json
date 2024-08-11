@@ -30,5 +30,6 @@
   "bugs": {
     "url": "https://github.com/Steelyhands/WebDevelopmentCW2-Resit/issues"
   },
-  "homepage": "https://github.com/Steelyhands/WebDevelopmentCW2-Resit#readme"
+  "homepage": "https://github.com/Steelyhands/WebDevelopmentCW2-Resit#readme",
+  "devDependencies": {}
 }

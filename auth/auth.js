@@ -8,7 +8,7 @@ const jwt = require("jsonwebtoken");
 const barnardosModel = require('../models/barnardosModel');
 const newLocation = new barnardosModel;
 
-// User login function
+// User login 
 exports.login = function (req, res, next) {
     let username = req.body.username;
     let password = req.body.password;
@@ -30,7 +30,6 @@ exports.login = function (req, res, next) {
                 let payload = { username: username, isAdmin: isAdmin.role, id: user._id}; 
                 let accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET);
                 res.cookie("jwt", accessToken);
-                // Pass onto the next middleware
                 next();
             } else { 
                 return res.status(403).send();
@@ -39,7 +38,7 @@ exports.login = function (req, res, next) {
     });
 }
 
-// Admin login function
+// Admin login 
 exports.admin_login = function (req, res, next) {
     let username = req.body.username;
     let password = req.body.password;
@@ -55,13 +54,13 @@ exports.admin_login = function (req, res, next) {
             return res.render("/login");
         }
 
-        // Compare provided password with stored password
+        // Compare provided password with stroed password
         bcrypt.compare(password, user.password, function (err, result) {
             if (result) {
                 let payload = { username: username, isAdmin: isAdmin.role, id: user._id}; 
                 let accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET);
                 res.cookie("jwt", accessToken);
-                // Pass onto the next middleware
+                // Pass onto the nxt middleware
                 next();
             } else { 
                 return res.status(403).send();
@@ -81,12 +80,12 @@ exports.verify = function (req, res, next) {
         payload = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
         next(); 
     } catch (e) {
-        // If an error occurred return request unauthorized error
+        // If an error occurred return request unauthorised error
         res.status(401).send();
     }
 }
 
-// Verify user function
+// Verify user 
 exports.verifyUser = function (req, res, next) 
 {
   let accessToken = req.cookies.jwt;
@@ -97,12 +96,12 @@ exports.verifyUser = function (req, res, next)
      try {
     next();
     } catch (e) {
-    // Unauthorized error
+    // Unauthorised error
     res.status(401).send();
   }
 };
 
-// Verify admin function
+// Verify admin 
 exports.verifyAdmin = function (req, res, next) {
   let accessToken = req.cookies.jwt;
     let payload = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
@@ -113,12 +112,12 @@ exports.verifyAdmin = function (req, res, next) {
             next();
         } 
     catch (e) {
-        // Unauthorized access error
+        // Unauthorised access error
         res.status(401).send();
         }
 };
 
-// Verify store function
+// Verify store 
 exports.verifyStore = function (req, res, next) 
 {
   let accessToken = req.cookies.jwt;
@@ -130,7 +129,7 @@ exports.verifyStore = function (req, res, next)
     next();
   } 
   catch (e) {
-    // Unauthorized error
+    // Unauthorised error
     res.status(401).send();
   }
 };
