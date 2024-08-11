@@ -1,4 +1,4 @@
-const postDAO = require('../Barnardos/Models/postModel');
+const postDAO = require('../Models/postModel');
 const postDB = new postDAO();
 
 // Method 'create' to create a new post with given parameters

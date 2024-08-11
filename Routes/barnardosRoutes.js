@@ -5,32 +5,28 @@ const router = express.Router();
 // Import the controllers
 const controller = require('../controllers/barnardosController.js');
 const postController = require('../controllers/postController.js');
-const User = require('./models/user');
+const User = require('../Models/userModel');
 const {login, verify} = require('../auth/auth') // Add verify here
 
-router.get('/new', verify, controller.show_new_entries)
 
 
 router.post('/login', login,controller.handle_login);
 
 // Define routes for different paths
-// Route for the landing page
-router.get(["/","Home","/Homepage"], controller.landing_page);
+// landing page
+router.get(["/","Home","/Homepage"], controller.home_page);
 
-// Route for the about page
+// about page
 router.get("/about", controller.about_page);
-// Route for the contact page
+// contact page
 router.get("/contact", controller.contact_page);
-// Route for the home page
+// home page
 router.get("/home", controller.home_page);
 
-// Route for the login page
-// This route renders the 'login' view when selected
-router.get("/login", (req, res) => {
-    res.render('login');
-});
+// login page
+router.get("/login", controller.login_page);
 
-// Route for the signup page
+// signup page
 router.get("/signup", (req, res) => {
     res.render('signup');
 });
