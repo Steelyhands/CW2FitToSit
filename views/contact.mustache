@@ -1,0 +1,23 @@
+{{>header}}
+<body>
+    <h1>Contact Us</h1>
+    <div class="container">
+        <form method="POST" action="/contact">
+            <label for="help">How can we help?</label>
+            <textarea id="help" name="help" placeholder="Tell us how we can help..."></textarea>
+
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" placeholder="Name..">
+
+            <label for="email">Email</label>
+            <input type="text" id="email" name="email" placeholder="Email">
+
+            <label for="phoneNumber">Phone Number</label>
+            <input type="text" id="phoneNumber" name="phoneNumber" placeholder="+44...">
+
+            <input type="submit" value="Send">
+        </form>
+    </div>
+    {{>footer}}
+</body>
+</html>

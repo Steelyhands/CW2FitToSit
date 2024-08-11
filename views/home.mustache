@@ -1,0 +1,22 @@
+{{>header}}
+<body>
+    <div class="container">
+        <!-- Logo image -->
+        <img src="Barnardos/public/images/barnardoslogo.png" alt="Barnardos Logo" class= "img-fluid" width="520" height="500">
+        <!-- Buttons -->
+        <div class="buttons text-right" style="margin-bottom: 1em;">
+            {{^user}}
+            <!-- Register button -->
+            <a href="/register" class="btn btn-lg btn-primary btn-block" role="button">Sign Up</a>
+            <!-- Sign in button -->
+            <a href="/login" class="btn btn-lg btn-primary btn-block" role="button">Sign in</a>
+            {{/user}}
+            {{#user}}
+            <!-- Sign out button -->
+            <a id="logout" href="/logout" class="btn btn-lg btn-primary btn-block" role="button">Sign out</a>
+            {{/user}}
+        </div>
+    </div>
+    {{>footer}}
+</body>
+</html>

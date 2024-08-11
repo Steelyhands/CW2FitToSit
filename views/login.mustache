@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+{{>header}}
+<body>
+    <div class="container">
+        <div class="row">
+            <!-- Barnardos logo -->
+            <div class="col-sm-6 text-left">
+                <img src="/images/barnardoslogo.png" alt="Barnardos Logo">
+            </div>
+            <!-- Form for signing in -->
+            <div class="col-sm-6 text-right">
+                <form method="post" role="form" action="/new">
+                    <!-- Heading -->
+                    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+                        <!-- Label and input field for the username -->
+                        <label for="inputUsername" class="sr-only">Username</label>
+                            <input type="text" id="inputUsername" class="form-control" placeholder="Username" required autofocus>
+                            <!-- Label and input field for the password -->
+                                <label for="inputPassword" class="sr-only">Password</label>
+                            <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                    <!-- Sign in button -->
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {{>footer}}
+</body>
+</html>
+
