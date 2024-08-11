@@ -1,6 +1,6 @@
 const userDAO = require('../Models/userModel.js');
 const userModel = new userDAO();
-const Post = require('../models/postModel');
+const Post = require('../Models/postModel');
 const auth = require('../auth/auth')
 const jwt = require("jsonwebtoken");
 

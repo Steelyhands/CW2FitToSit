@@ -1,5 +1,5 @@
-const postDAO = require('../Models/postModel');
-const postDB = new postDAO();
+const postDB = require('../Models/postModel');
+
 
 // Method 'create' to create a new post with given parameters
 // Only admins can create posts
