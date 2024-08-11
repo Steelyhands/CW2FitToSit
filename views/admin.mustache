@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Page</title>
+    <!-- Add your CSS file here -->
+    <link rel="stylesheet" type="text/css" href="/public/css/styles.css">
+</head>
+<body>
+    <h1>Admin Page</h1>
+
+    <!-- Form to create a new post -->
+    <form action="/post/createPost" method="POST">
+        <h2>Create Post</h2>
+        <input type="text" name="itemDescription" placeholder="Item Description" required>
+        <input type="number" name="numberHeld" placeholder="Number Held" required>
+        <input type="text" name="location" placeholder="Location" required>
+        <input type="text" name="image" placeholder="Image URL">
+        <button type="submit">Create Post</button>
+    </form>
+
+    <!-- List of all posts with options to update or delete each post -->
+    <h2>All Posts</h2>
+    <ul>
+        {{#posts}}
+        <li>
+            <p>{{itemDescription}}</p>
+            <a href="/post/updatePost/{{_id}}">Update</a>
+            <a href="/post/removePost/{{_id}}">Delete</a>
+        </li>
+        {{/posts}}
+    </ul>
+
+    <!-- Form to create a new admin -->
+    <form action="/admin/createAdmin" method="POST">
+        <h2>Create Admin</h2>
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit">Create Admin</button>
+    </form>
+
+    <!-- List of all admins with options to update or delete each admin -->
+    <h2>All Admins</h2>
+    <ul>
+        {{#admins}}
+        <li>
+            <p>{{username}}</p>
+            <a href="/admin/updateAdmin/{{_id}}">Update</a>
+            <a href="/admin/deleteAdmin/{{_id}}">Delete</a>
+        </li>
+        {{/admins}}
+    </ul>
+</body>
+</html>

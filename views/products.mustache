@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Posts Page</title>
+    <link rel="stylesheet" type="text/css" href="/public/css/styles.css">
+</head>
+<body>
+    <h1>Donations</h1>
+
+    <!-- List of all posts made by admins, grouped by location -->
+    <h2>All availablke Donations</h2>
+    {{#locations}}
+    <h3>Location: {{location}}</h3>
+    <ul>
+        {{#posts}}
+        <li>
+            <h4>{{itemDescription}}</h4>
+            <p>Number Held: {{numberHeld}}</p>
+            <!-- Display the image if it's a jpg file -->
+            {{#image}}
+            {{#isJpg}}
+            <img src="{{image}}" alt="{{itemDescription}}">
+            {{/isJpg}}
+            {{/image}}
+        </li>
+        {{/posts}}
+    </ul>
+    {{/locations}}
+</body>
+</html>
+

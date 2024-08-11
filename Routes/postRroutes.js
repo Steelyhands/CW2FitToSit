@@ -16,3 +16,25 @@ exports.delete = (req, res) => {
         .then(result => res.status(200).send({ message: `Removed ${result} post(s).` }))
         .catch(err => res.status(500).send({ error: err.message }));
 };
+
+exports.update = (req, res) => {
+    const postId = req.params.id;
+    const updatedPost = {
+      comment: req.body.comment,
+      landlordRating: req.body.landlordRating,
+      estateAgentRating: req.body.estateAgentRating
+    };
+    const post = new Post(updatedPost);
+    post.update(postId)
+      .then(numReplaced => {
+        if (numReplaced === 0) {
+          res.status(404).send('Post not found');
+          return;
+        }
+        res.redirect('/posts');
+      })
+      .catch(err => {
+        res.status(500).send(err);
+      });
+  };
+  

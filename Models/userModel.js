@@ -1,18 +1,17 @@
-const nedb = require('gray-nedb');
-const nedb = require('gray-nedb');
+const nedb = require('nedb');
 const userDB = new nedb({ filename: './db/user.db', autoload: true });
 const bcrypt = require('bcrypt');
 const saltRounds = 10; // Define saltRounds
 
 //creating and initialising UserDAO object
 class UserDAO {
-    constructor(fullName, email, address, phoneNumber, isAdmin, userName){
+    constructor(fullName, email, address, phoneNumber, isAdmin, userName, id){
         this.userName = userName;
         this.fullName = fullName;
         this.email = email;
         this.address = address;
         this.phoneNumber = phoneNumber;
-        this.userId = userId;
+        this.id = id;
         this.isAdmin = isAdmin;
     }
 
@@ -38,8 +37,8 @@ class UserDAO {
     }
 
     // Update an existing user
-    updateUser(userId, updatedData) {
-            userDB.update({_id: userId}, { $set: updatedData }, {}, function(err, numReplaced) {
+    updateUser(id, updatedData) {
+            userDB.update({_id: id}, { $set: updatedData }, {}, function(err, numReplaced) {
                 if (err){
                     console.log('Error updating user: ', err);
                 }
@@ -50,13 +49,13 @@ class UserDAO {
     }
 
     // Remove a user
-    removeUser(userId) {
-            userDB.remove({_id: userId}, {}, function(err, removeUser) {
+    removeUser(id) {
+            userDB.remove({_id: id}, {}, function(err, removeUser) {
                 if (err){ 
                     reject(err);
                 }
                 else{ 
-                    console.log("user" + userId + "removed from system")
+                    console.log("user" + id + "removed from system")
                     resolve(removeUser);
                 }
             });
@@ -78,7 +77,7 @@ class UserDAO {
 
     // Get a user by ID
     getUserById(userId, cb) {
-        userDB.find({_id: userId}, function(err, user) {
+        userDB.find({_id: id}, function(err, user) {
             if (err){ 
                 console.log('User not found');
                 return cb(err);

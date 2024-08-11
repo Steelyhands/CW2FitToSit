@@ -17,7 +17,6 @@ const public = path.join(__dirname, 'public');
 app.use(express.static(public));
 
 require('dotenv').config(); // loads data from .env file
-const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
 app.use(express.urlencoded({ extended: true }));
@@ -27,7 +26,7 @@ const mustache = require('mustache-express');
 app.engine('mustache', mustache());
 app.set('view engine', 'mustache');
 
-const router = require('./routes/barnardosRoutes');
+const router = require('./Routes/barnardosRoutes.js');
 app.use('/', router);
 
 let db = new Datastore({ filename: './database/employee.db', autoload: true });
@@ -42,4 +41,3 @@ db.loadDatabase(function (err) {    // Callback is optional
 
 require('dotenv').config()
 
-app.use(cookieParser())

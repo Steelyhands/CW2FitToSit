@@ -4,7 +4,8 @@ const postDB = new nedb({ filename: './db/post.db', autoload: true });
 
 // Define a class 'Post' with properties itemDescription, numberHeld, location, and image
 class Post {
-    constructor(itemDescription, numberHeld, location, image){
+    constructor(itemDescription, numberHeld, location, image, cost){
+        this.cost = cost;
         this.itemDescription = itemDescription;
         this.numberHeld = numberHeld;
         this.location = location;
