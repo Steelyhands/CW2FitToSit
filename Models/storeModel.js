@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const nedb = require('gray-nedb');
 const storeDB = new nedb({ filename: './db/store.db', autoload: true });
 
 // Create a new store
