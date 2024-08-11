@@ -13,8 +13,8 @@ app.listen(3000, () => {
     console.log('Server started on port 3000. Ctrl^c to quit.'); 
 })
 
-const public = path.join(__dirname, 'public');
-app.use(express.static(public));
+const publicDir = path.join(__dirname, 'public');
+app.use(express.static(publicDir));
 
 require('dotenv').config(); // loads data from .env file
 app.use(cookieParser());
