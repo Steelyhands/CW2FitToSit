@@ -68,8 +68,8 @@ exports.verifyAdmin = function (req, res, next) {
         }
 };
 
-// Export the functions
-module.exports = {
-    login: login,
-    verify: verify
-};
+// Export the functions (no longer needed as using exports.)
+//module.exports = {
+    //login: login,
+    //verify: verify
+//};

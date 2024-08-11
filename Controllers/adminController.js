@@ -1,77 +1,60 @@
-const User = require('../Barnardos/models/adminModel');
-const nedb = require('gray-nedb');
-const userDB = new nedb({ filename: './db/user.db', autoload: true });
-
-class User {
-    constructor(name, email, address, phoneNumber, isAdmin, username, password){
-        this.name = name;
-        this.email = email;
-        this.address = address;
-        this.phoneNumber = phoneNumber;
-        this.isAdmin = isAdmin;
-        this.username = username;
-        this.password = password;
-    }
-
-    // Create a new admin
-    create() {
-        const entry = {
-            name: this.fullName,
-            email: this.email,
-            address: this.address,
-            phoneNumber: this.phoneNumber,
-            isAdmin: this.isAdmin,
-            username: this.username,
-            password: this.password,
-
-        };
-        return new Promise((resolve, reject) => {
-            userDB.insert(entry, function(err, newUser) {
-                if (err) reject(err);
-                else resolve(newUser);
-            });
-        });
-    }
-
-    // Update an existing user
-    static updateUser(userId, updatedData) {
-        return new Promise((resolve, reject) => {
-            userDB.update({_id: userId}, { $set: updatedData }, {}, function(err, numReplaced) {
-                if (err) reject(err);
-                else resolve(numReplaced);
-            });
-        });
-    }
-
-    // Remove a user
-    static removeUser(userId) {
-    return new Promise((resolve, reject) => {
-        userDB.remove({_id: userId}, {}, function(err) {
-            if (err) reject(err);
-            else resolve('user deleted.');
-        });
+// Middleware for checking if admin exists and has correct permissions
+function checkAdmin(req, res, next) {
+    const adminId = req.params.id;
+    const loggedInAdminId = req.user.id;
+  
+    Admin.findById(adminId, (err, admin) => {
+      if (err) {
+        return next(new Error('Internal Server Error'));
+      }
+      if (!admin) {
+        return res.status(404).send('Admin not found');
+      }
+      if (admin._id.toString() !== loggedInAdminId && !admin.isAdmin) {
+        return res.status(403).send('Unauthorized');
+      }
+  
+      // If usere has permissions and exists move on 
+      next();
     });
-}
-
-    // Get all users
-    static getAllUsers() {
-        return new Promise((resolve, reject) => {
-            userDB.find({}, function(err, users) {
-                if (err) reject(err);
-                else resolve(users);
-            });
-        });
-    }
-
-    // Get a user by ID
-    static getUserById(userId) {
-        return new Promise((resolve, reject) => {
-            userDB.findOne({_id: userId}, function(err, user) {
-                if (err) reject(err);
-                else resolve(user);
-            });
-        });
-    }
-}
-
-module.exports = User;
+  }
+  
+  exports.update = [checkAdmin, (req, res, next) => {
+    const adminId = req.params.id;
+    const updatedAdmin = {
+      fullName: req.body.fullName,
+      email: req.body.email,
+      address: req.body.address,
+      phoneNumber: req.body.phoneNumber,
+      isAdmin: req.body.isAdmin,
+      username: req.body.username,
+      password: req.body.password
+    };
+  
+    Admin.update(adminId, updatedAdmin, (err, numReplaced) => {
+      if (err) {
+        return next(new Error('Internal Server Error'));
+      }
+      if (numReplaced === 0) {
+        return res.status(404).send('Admin not found');
+      }
+      
+      res.redirect('/admin');
+    });
+  }];
+  
+  exports.delete = [checkAdmin, (req, res, next) => {
+    const adminId = req.params.id;
+  
+    Admin.delete(adminId, (err, numRemoved) => {
+      if (err) {
+        return next(new Error('Internal Server Error'));
+      }
+      if (numRemoved === 0) {
+        return res.status(404).send('Admin not found');
+      }
+  
+      res.redirect('/admin');
+    });
+  }];
+  

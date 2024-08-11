@@ -1,7 +1,9 @@
 const nedb = require('gray-nedb');
 const adminDB = new nedb({ filename: './db/admin.db', autoload: true });
+const User = require('../Models/userModel');
 
-class AdminDAO {
+
+class Admin extends User {
     constructor(name, email, address, phoneNumber, isAdmin, username, password){
         this.name = name;
         this.email = email;
@@ -72,4 +74,4 @@ class AdminDAO {
     }
 }
 
-module.exports = AdminDAO;
+module.exports = Admin;

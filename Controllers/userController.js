@@ -2,76 +2,104 @@ const UserDAO = require('../Barnardos/models/UserModel'); // Update the path as 
 const bcrypt = require('bcrypt');
 const saltRounds = 10; // Define saltRounds
 
-class User {
-  constructor(name, email, address, phoneNumber, isAdmin, username, password){
-      this.name = name;
-      this.email = email;
-      this.address = address;
-      this.phoneNumber = phoneNumber;
-      this.isAdmin = isAdmin;
-      this.username = username;
-      this.password = password;
-  }
+exports.createUser = (req, res) => {
+  const { fullName, email, address, isAdmin, username, password } = req.body;
 
-  update_user(req, res) {
-    const fullName = req.body.fullName;
-    const email = req.body.email;
-    const address = req.body.address;
-    const phoneNumber = req.body.phoneNumber;
-    const isAdmin = req.body.isAdmin;
-    const userName = req.body.userName;
-    const password = req.body.password;
+  const newUser = new UserDAO(fullName, email, address, isAdmin, username, password);
 
-    if (!fullName || !email || !address || !phoneNumber || !isAdmin || !userName || !password) {
-      res.send(401, "Please provide all user details");
+  UserDAO.create(newUser, (err, user) => {
+    if (err) {
+      res.status(500).send(err);
       return;
     }
 
-    bcrypt.hash(password, saltRounds).then(function(hash){
-        const updatedUser = {
-            fullName: fullName,
-            email: email,
-            address: address,
-            phoneNumber: phoneNumber,
-            isAdmin: isAdmin,
-            userName: userName,
-            password: hash,
-        };
-        UserDAO.updateUser(userName, updatedUser)
-            .then(() => res.json({ message: 'User updated successfully' }))
-            .catch(err => res.status(500).json({ error: err.message }));
-    });
+    res.redirect("/");
+  });
+};
+
+exports.updateUser = (req, res) => {
+  const { fullName, email, address, isAdmin, userName, password } = req.body;
+
+  if (!fullName || !email || !address || !isAdmin || !userName || !password) {
+    res.status(401).send("Please provide all user details");
+    return;
   }
 
-  delete_user = function(req, res) {
-    const userId = req.body.userId;
-  
-    // Call the deleteUser method from your userModel to delete the user
-    userDao.deleteUser(userId, (err) => {
-        if (err) {
-            // Handle error
-            console.error("Error deleting user:", err);
-            res.status(500).send("Internal server error");
-            return;
-        }
-        // Redirect back to the user database page after deletion
-        res.redirect("/user/users");
-    });
-  };
+  bcrypt.hash(password, saltRounds, function(err, hash) {
+    if (err) {
+      res.status(500).send("Error hashing password");
+      return;
+    }
 
-  show_user_update(req, res) {
-    res.render('user/updateUser', {
-      user: 'user'
-    });
-  }
+    const updatedUser = {
+      fullName: fullName,
+      email: email,
+      address: address,
+      isAdmin: isAdmin,
+      userName: userName,
+      password: hash,
+    };
 
-  show_user_account(req, res) {
-    res.render('user/userAccount', {
-      user: 'user',
-      post: 'post'
-    });
-  }
+    UserDAO.updateUser(userName, updatedUser)
+      .then(() => res.json({ message: 'User updated successfully' }))
+      .catch(err => res.status(500).json({ error: err.message }));
+  });
+};
 
+exports.deleteUser = (req, res) => {
+  const userId = req.body.userId;
+
+  // Call the deleteUser method from your userModel to delete the user
+  UserDAO.deleteUser(userId, (err) => {
+    if (err) {
+      // Handle error
+      console.error("Error deleting user:", err);
+      res.status(500).send("Internal server error");
+      return;
+    }
+    // Redirect back to the user database page after deletion
+    res.redirect("/user/users");
+  });
+};
+//passing user info
+exports.showUserUpdate = (req, res) => {
+  res.render('user/updateUser', {
+    user: 'user'
+  });
 }
 
-module.exports = User;
+//view account details
+exports.showUserAccount = (req, res) => {
+  res.render('user/userAccount', {
+    user: 'user',
+    post: 'post'
+  });
+}
+
+//View all users
+exports.viewAllUsers = (req, res) => {
+  Admin.viewAllUsers((err, users) => {
+    if (err) {
+      res.status(500).send(err);
+      return;
+    }
+    res.render("admin/allUsers", { users });
+  });
+};
+
+// It's a route handler for viewing all users.
+exports.viewAllUsers = (req, res) => {
+  // The Admin model's viewAllUsers method is called.
+  // This method is expected to retrieve all users from the database.
+  Admin.viewAllUsers((err, users) => {
+    //error handling
+    if (err) {
+      //internal server error
+      res.status(500).send(err);
+      return;
+    }
+    // If there's no error, the server responds by rendering the "admin/allUsers" view.
+    // The retrieved users are passed to the view for display.
+    res.render("admin/allUsers", { users });
+  });
+};
