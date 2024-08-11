@@ -109,7 +109,7 @@ exports.addNewAdmin = function (req, res)
     const password = req.body.password;
 
     // Checks for no Username or Password
-    if (!username || !password) 
+    if (!username || !password || !fullName || !email || !address || !phoneNumber) 
     { 
         res.send(401, "No User or no Password"); // Catches error
         return;
