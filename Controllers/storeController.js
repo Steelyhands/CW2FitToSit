@@ -1,31 +1,75 @@
-const Store = require('../Models/storeModel');
 const express = require('express');
 const router = express.Router();
-const Post = require('../models/post');
+const storeDB = new nedb({ filename: './db/store.db', autoload: true });
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
-exports.create_store = (req, res) => {
-    const { storeName, email, address, postcode, telephone, password } = req.body;
-  
-    bcrypt.hash(password, saltRounds, function(err, hash) {
+// Create a new store
+router.post('/stores', (req, res) => {
+});
+
+// Get all stores
+router.get('/stores', (req, res) => {
+    storeDB.find({}, function(err, stores) {
         if (err) {
             res.status(500).send(err);
             return;
         }
 
-        const newStore = new Store(storeName, email, address, postcode, telephone, hash);
-  
-        Store.create(newStore, (err, store) => {
-            if (err) {
-                res.status(500).send(err);
-                return;
-            }
-  
-            res.redirect("/");
-        });
+        res.send(stores);
     });
-};
+});
+
+// Get specific store
+router.get('/stores/:id', (req, res) => {
+    const _id = req.params.id;
+
+    storeDB.findOne({ _id: _id }, function(err, store) {
+        if (err) {
+            res.status(500).send(err);
+            return;
+        }
+
+        if (!store) {
+            res.status(404).send();
+            return;
+        }
+
+        res.send(store);
+    });
+});
+
+// Update 
+router.put('/stores/:id', (req, res) => {
+    const _id = req.params.id;
+    const updatedStore = req.body;
+
+    storeDB.update({ _id: _id }, updatedStore, {}, function(err, numReplaced) {
+        if (err) {
+            res.status(500).send(err);
+            return;
+        }
+
+        res.send(`Updated ${numReplaced} store(s)`);
+    });
+});
+
+// Delete
+router.delete('/stores/:id', (req, res) => {
+    const _id = req.params.id;
+
+    storeDB.remove({ _id: _id }, {}, function(err, numRemoved) {
+        if (err) {
+            res.status(500).send(err);
+            return;
+        }
+
+        res.send(`Deleted ${numRemoved} store(s)`);
+    });
+});
+
+module.exports = router;
+
 
 exports.show_login = function (req, res) {
     res.render("store/login");
@@ -56,7 +100,7 @@ exports.update_store = function (req, res) {
 exports.delete_store = function(req, res) {
     const userId = req.body.userId;
   
-    // Call the deleteUser method from your userModel to delete the user
+    // deleteStore
     Store.deleteStore(userId, (err) => {
         if (err) {
             // Handle error

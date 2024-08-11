@@ -58,7 +58,6 @@ exports.update = function(req, res) {
       landlordRating: req.body.landlordRating,
       estateAgentRating: req.body.estateAgentRating
     };
-    const userId = req.user.id; // Assuming user ID is stored in the session
     const isAdmin = req.user.isAdmin; // Assuming isAdmin flag is set for admins
   
     if (!isAdmin) {
