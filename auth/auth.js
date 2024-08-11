@@ -9,7 +9,7 @@ const newLocation = new barnardosModel;
 
 
 // The 'login' function
-function login(req, res, next) {
+exports.login = function (req, res, next) {
     let username = req.body.username;
     let password = req.body.password;
 
@@ -20,12 +20,12 @@ function login(req, res, next) {
         } 
         if (!user) { 
             console.log("user ", username, " not found"); 
-            return res.status(401).send();
+            return res.render("/register");
         }
         //compare provided password with stored password
         bcrypt.compare(password, user.password, function (err, result) {
             if (result) {
-                let payload = { username: user.username }; 
+                let payload = { username: username, isAdmin: isAdmin.role, id: user._id}; 
                 let accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET);
                 res.cookie("jwt", accessToken);
                 //and then pass onto the next middleware
@@ -38,7 +38,7 @@ function login(req, res, next) {
 }
 
 // The 'verify' function
-function verify(req, res, next) {
+exports.verify = function (req, res, next) {
     let accessToken = req.cookies.jwt; 
     if (!accessToken) { 
         return res.status(403).send();
@@ -52,6 +52,21 @@ function verify(req, res, next) {
         res.status(401).send();
     }
 }
+
+exports.verifyAdmin = function (req, res, next) {
+  let accessToken = req.cookies.jwt;
+    let payload = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+    if (payload.role != "admin") {
+            return res.status(403).send();
+        }
+    try {
+            next();
+        } 
+    catch (e) {
+        //unauthorised acxcess error
+        res.status(401).send();
+        }
+};
 
 // Export the functions
 module.exports = {
