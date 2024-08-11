@@ -1,0 +1,23 @@
+{{>header}}
+<body>
+    <h1>User Profile</h1>
+    <form action="/updateUser" method="POST">
+        <label for="fullName">Full Name:</label><br>
+            <input type="text" id="fullName" name="fullName" value="{{fullName}}"><br>
+        <label for="email">Email:</label><br>
+            <input type="email" id="email" name="email" value="{{email}}"><br>
+        <label for="address">Address:</label><br>
+                <input type="text" id="address" name="address" value="{{address}}"><br>
+        <label for="phoneNumber">Phone Number:</label><br>
+                <input type="text" id="phoneNumber" name="phoneNumber" value="{{phoneNumber}}"><br>
+        <label for="isAdmin">Admin:</label><br>
+            <input type="checkbox" id="isAdmin" name="isAdmin" value="{{isAdmin}}" {{#isAdmin}}checked{{/isAdmin}}><br>
+        <label for="username">Username:</label><br>
+            <input type="text" id="username" name="username" value="{{username}}" disabled><br>
+        <label for="password">Password:</label><br>
+            <input type="password" id="password" name="password" value="{{password}}"><br>
+        <input type="submit" value="Update">
+    </form>
+    {{>footer}}
+</body>
+

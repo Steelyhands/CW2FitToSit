@@ -1,7 +1,6 @@
 const Admin = require('../Barnardos/Models/Admin'); // Assuming Admin class is in '../models/Admin'
 const bcrypt = require('bcrypt');
 
-
 // Middleware for checking if admin exists and has correct permissions
 function checkAdmin(req, res, next) {
     const adminId = req.params.id;
@@ -19,6 +18,7 @@ function checkAdmin(req, res, next) {
       })
       .catch(err => next(new Error('Internal Server Error')));
 }
+
 
 exports.update = [checkAdmin, (req, res, next) => {
   const adminId = req.params.id;
@@ -73,27 +73,7 @@ exports.createAdmin = (req, res, next) => {
       .catch(err => next(new Error('Internal Server Error')));
   });
 };
-const Admin = require('../Barnardos/Models/Admin'); // Assuming Admin class is in '../models/Admin'
-const bcrypt = require('bcrypt');
-const saltRounds = 10; // Define saltRounds
 
-// Middleware for checking if admin exists and has correct permissions
-function checkAdmin(req, res, next) {
-    const adminId = req.params.id;
-    const loggedInAdminId = req.user.id;
-  
-    Admin.getAdminById(adminId)
-      .then(admin => {
-        if (!admin) {
-          return res.status(404).send('Admin not found');
-        }
-        if (admin._id.toString() !== loggedInAdminId && !admin.isAdmin) {
-          return res.status(403).send('Unauthorized');
-        }
-        next();
-      })
-      .catch(err => next(new Error('Internal Server Error')));
-}
 
 exports.update = [checkAdmin, (req, res, next) => {
   const adminId = req.params.id;
