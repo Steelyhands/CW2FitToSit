@@ -4,7 +4,7 @@ const express = require('express');
 const router = express.Router();
 // Import the controllers
 const controller = require('../Barnardos/controllers/barnardosController.js');
-const postController = require('../controllers/postController.js');
+const postController = require('../Barnardos/controllers/postController.js');
 const User = require('./models/user');
 const {login} = require('../auth/auth')
 

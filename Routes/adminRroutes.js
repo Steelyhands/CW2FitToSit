@@ -1,25 +1,28 @@
-router.get('/new', verify, controller.show_new_entries)
-
-// Importing express
 const express = require('express');
-
-// Creating a new router object from the express module
 const router = express.Router();
-
-// Importing the userController from the specified path
-const userController = require('..Barnardos/controllers/userController');
+const AdminController = require('../Barnardos/controllers/adminController');
 
 // Route to display the form for creating a new admin
-router.get('/createAdmin', userController.createAdminForm);
+router.get('/createAdmin', AdminController.createAdmin);
 
-// Route to handle the POST request to create a new admin
-router.post('/createAdmin', userController.createAdmin);
+// Route to handle the creation of a new admin
+router.post('/createAdmin', AdminController.addNewAdmin);
 
-// Route to get all users
-router.get('/allUsers', userController.viewAllUsers);
+// Middleware for checking if admin exists and has correct permissions
+router.use('/admins/:id', AdminController.checkAdmin);
 
-// Route to delete a user by their ID
-router.delete('/allUsers/:id', userController.deleteUser);
+// Route to display the form for updating an existing admin
+router.get('/admins/:id/edit', (req, res) => {
+  res.render('updateUser', { admin: req.admin });
+});
 
-// Exporting the router object to be used in other modules
+// Route to handle updating an existing admin
+router.put('updateAdmin', AdminController.update);
+
+// Route to handle deleting an existing admin
+router.delete('/deleteAdmin/:id', AdminController.delete);
+
+// Route to display all admins
+router.get('/displayAdmins', AdminController.admin_page);
+
 module.exports = router;
