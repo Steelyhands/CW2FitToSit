@@ -1,20 +1,31 @@
 const Store = require('../Models/storeModel');
-const storeDAO = new store();
+const express = require('express');
+const router = express.Router();
+const Post = require('../models/post');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
-exports.createUser = (req, res) => {
+exports.create_store = (req, res) => {
     const { storeName, email, address, postcode, telephone, password } = req.body;
   
-    const newStore = new UserDAO(storeName, email, address, postcode, telephone, password);
+    bcrypt.hash(password, saltRounds, function(err, hash) {
+        if (err) {
+            res.status(500).send(err);
+            return;
+        }
+
+        const newStore = new Store(storeName, email, address, postcode, telephone, hash);
   
-    storeDAO.create(newStore, (err, store) => {
-      if (err) {
-        res.status(500).send(err);
-        return;
-      }
+        Store.create(newStore, (err, store) => {
+            if (err) {
+                res.status(500).send(err);
+                return;
+            }
   
-      res.redirect("/");
+            res.redirect("/");
+        });
     });
-  };
+};
 
 exports.show_login = function (req, res) {
     res.render("store/login");
@@ -38,7 +49,7 @@ exports.update_store = function (req, res) {
       return;
     }
   
-    pantryDao.updatePantry(address, postcode, telephone, password);
+    Store.update_Store(storeName, address, postcode, telephone, password);
     res.redirect("/store/storeAccount");
 };
 
@@ -46,7 +57,7 @@ exports.delete_store = function(req, res) {
     const userId = req.body.userId;
   
     // Call the deleteUser method from your userModel to delete the user
-    storeDao.deleteUser(userId, (err) => {
+    Store.deleteStore(userId, (err) => {
         if (err) {
             // Handle error
             console.error("Error deleting user:", err);
@@ -59,13 +70,40 @@ exports.delete_store = function(req, res) {
 };
 
 exports.show_stores = function (req, res) {
-    pantryDao.loadAllPantries()
+    Store.loadAllStores()
       .then((list) => {
         res.render("store/stores", {
-          users: list,
+          stores: list,  
         });
       })
       .catch((err) => {
         console.log("promise rejected", err);
       });
+};
+
+
+// Get a specific store and its associated posts
+exports.show_store_posts = function (req, res) {
+    const _id = req.params.id;
+
+    Store.findById(_id)
+        .then((store) => {
+            if (!store) {
+                res.status(404).send();
+                return;
+            }
+
+            // Find posts with the same location as the store
+            return Post.find({ location: store.location })
+                .then((posts) => {
+                    res.render("store/store_and_posts", {
+                        store: store,
+                        posts: posts
+                    });
+                });
+        })
+        .catch((err) => {
+            console.log("promise rejected", err);
+            res.status(500).send();
+        });
 };
