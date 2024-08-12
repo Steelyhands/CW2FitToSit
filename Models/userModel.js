@@ -5,23 +5,21 @@ const saltRounds = 10; // Define saltRounds
 
 //creating and initialising UserDAO object
 class UserDAO {
-    constructor(fullName, email, address, isAdmin, userName, id){
+    constructor(fullName, email, address, isAdmin, userName){
         this.userName = userName;
         this.fullName = fullName;
         this.email = email;
         this.address = address;
-        this.id = id;
         this.isAdmin = isAdmin;
     }
 
     // Create a new user
-    createUser(fullName, email, address, isAdmin, userName, id) {
+    createUser(fullName, email, address, isAdmin, userName) {
         const entry = {
             userName: userName,
             fullName: fullName,
             email: email,
             address: address,
-            userId: userId,
             isAdmin: isAdmin,
         };
             userDB.insert(entry, function(err, newUser) {
@@ -74,7 +72,7 @@ class UserDAO {
     }
 
     // Get a user by ID
-    getUserById(userId, cb) {
+    getUserById(id, cb) {
         userDB.find({_id: id}, function(err, user) {
             if (err){ 
                 console.log('User not found');

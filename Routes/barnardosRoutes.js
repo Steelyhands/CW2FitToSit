@@ -42,15 +42,17 @@ router.use(function (err, req, res, next) {
 // Route for handling form submissions to '/signup'
 router.post('/signup', (req, res) => {
     // Access form data from req.body
-    const { userId } = req.body;
-
-    // Here you would typically validate the input data and save the new user to your database
-    // For example:
-    const user = new User(userId);
-    user.createUser(userId)
-        .then(() => res.status(200).send({ message: 'User created successfully.' }))
-        .catch(err => res.status(500).send({ error: err.message }));
+    const { id } = req.body;
+    const user = new User(id);
+    user.createUser(id, (err, newUser) => {
+        if (err) {
+            res.status(500).send({ error: err.message });
+        } else {
+            res.status(200).send({ message: 'User created successfully.' });
+        }
+    });
 });
+
 
 // Export the router for use in other files
 module.exports = router;
