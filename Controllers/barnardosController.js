@@ -4,37 +4,40 @@ const Post = require('../Models/postModel');
 const auth = require('../auth/auth')
 const jwt = require("jsonwebtoken");
 
-
 exports.home_page = function (req, res) {
     res.render("home", {
         'header': true,
         'nav': true
     });
 }
+
 exports.about_page = function (req, res) {
     res.render("about", {
         'header': true,
         'nav': true
     });
 }
+
 exports.login_page = function (req, res) {
     res.render("login", {
         'header': true,
         'nav': true
     });
 }
-exports.logout = function (req, res) 
-{
+
+exports.logout = function (req, res) {
     res.clearCookie("jwt")
     .status(200)
     .redirect("/");
 };
+
 exports.contact_page = function (req, res) {
     res.render("contact", {
         'header': true,
         'nav': true
     });
 }
+
 exports.signup = function (req, res) {
     res.render("signup", {
         'header': true,
@@ -42,16 +45,12 @@ exports.signup = function (req, res) {
     });
 }
 
-exports.handle_login = function (req, res)
-{
+exports.handle_login = function (req, res) {
     // Call the Login method from Auth
-    auth.login(req, res, function (err)
-    {
-        if (err) // Catches error logging in
-        {
+    auth.login(req, res, function (err) {
+        if (err) { // Catches error logging in
             console.error("Error:", err);
             res.render("login");
-
             return;
         }
 
@@ -61,23 +60,19 @@ exports.handle_login = function (req, res)
 
         // Directs to different pages based on a User's role
         if (role === 'user') {
-                res.redirect("/properties");
-            } 
-            else if (role === 'admin') {
-                res.redirect("/admin");
-            } 
-        else // Catches any errors
-         {
+            res.redirect("/properties");
+        } else if (role === 'admin') {
+            res.redirect("/admin");
+        } else { // Catches any errors
             res.status(403).send("Error: Undefined Role");
-         }
+        }
     });
 };
 
 exports.admin_page = function (req, res) {
     userModel.loadAllUsers()
         .then((list) => {
-            res.render("admin", 
-            {
+            res.render("admin", {
                 'header': true,
                 'nav': true,
                 users: list
@@ -87,7 +82,6 @@ exports.admin_page = function (req, res) {
             console.log("Error Loading Users", err);
             res.status(500).send('Error Loading Users');
         });
-        
 }
 
 exports.createAdmin = function (req, res) {
@@ -97,8 +91,7 @@ exports.createAdmin = function (req, res) {
     });
 }
 
-exports.addNewAdmin = function (req, res)
-{
+exports.addNewAdmin = function (req, res) {
     // Declaring variables
     const username = req.body.username; 
     const fullName = req.body.fullName;
@@ -108,17 +101,14 @@ exports.addNewAdmin = function (req, res)
     const password = req.body.password;
 
     // Checks for no Username or Password
-    if (!username || !password || !fullName || !email || !address) 
-    { 
+    if (!username || !password || !fullName || !email || !address) { 
         res.send(401, "No User or no Password"); // Catches error
         return;
     }
 
     // Runs the 'lookup' Function in the userModel to check if a User already exists
-    userModel.lookup(username, function(err, u) 
-    {
-        if (u) // Catches if User exists
-        {
+    userModel.lookup(username, function(err, u) {
+        if (u) { // Catches if User exists
             console.log("An Admin with this Username already exists");
             res.send(401, "User exists:", username); 
             return; 
@@ -130,3 +120,21 @@ exports.addNewAdmin = function (req, res)
         res.redirect('/createAdmin');
     });
 }
+
+exports.handle_contact_form = (req, res) => {
+    // Access form data from req.body
+    const { name, email, message } = req.body;
+
+    // Create a new Message with the form data
+    const newMessage = new Message(name, email, message);
+    // Save the new message to your db
+    newMessage.save()
+        .then(() => {
+            // If saved successfully, send a success status
+            res.status(200).send({ message: 'Message received.' });
+        })
+        .catch(err => {
+            //error message
+            res.status(500).send({ error: err.message });
+        });
+};

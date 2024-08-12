@@ -16,6 +16,7 @@ router.get(["/","Home","/Homepage"], controller.home_page);
 router.get("/about", controller.about_page);
 // contact page
 router.get("/contact", controller.contact_page);
+router.post("/contact", controller.handle_contact_form);
 // home page
 router.get("/home", controller.home_page);
 
