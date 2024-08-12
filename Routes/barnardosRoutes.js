@@ -1,3 +1,6 @@
+const Nedb = require('nedb');
+const contactDB = new Nedb({filename:'./db/contact.db', autoload: true})
+
 // Import the express module
 const express = require('express');
 // Create a new router
@@ -17,6 +20,7 @@ router.get("/about", controller.about_page);
 // contact page
 router.get("/contact", controller.contact_page);
 router.post("/contact", controller.handle_contact_form);
+
 // home page
 router.get("/home", controller.home_page);
 
@@ -32,9 +36,6 @@ router.get("/signup", (req, res) => {
 router.post('/signup', (req, res) => {
     // Access form data from req.body
     const { userId } = req.body;
-
-    // Here you would typically validate the input data and save the new user to your database
-    // For example:
     const user = new User(userId);
     user.createUser()
         .then(() => res.status(200).send({ message: 'User created successfully.' }))
@@ -54,6 +55,14 @@ router.use(function (err, req, res, next) {
     res.type('text/plain');
     res.send('Internal Server Error.');
 });
+
+// GET handler for '/contact'
+router.get('/contact', (req, res) => {
+    // Render the contact form
+    res.render('contact_form');
+});
+
+
 
 // Export the router for use in other files
 module.exports = router;

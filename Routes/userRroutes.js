@@ -24,6 +24,10 @@ router.get('/users', userController.show_users);
 
 module.exports = router;
 
+// Route for handling form submissions to '/signup'
+router.get("/signup", controller.createUser);
+router.post("/signup",controller.CreateUser)
+
 // handling 404 errors
 //router.use(function (req, res) {
     //res.status(404);

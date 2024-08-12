@@ -114,7 +114,7 @@ exports.addNewAdmin = function (req, res) {
             return; 
         }
 
-        // If they don't already exist, you can create them
+        // If they don't already exist, create them
         userModel.createAdmin(username, name, password); 
         console.log("Registered User: ", username, ", Name: ", name, ", Password: ", password);
         res.redirect('/createAdmin');

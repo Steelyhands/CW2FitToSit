@@ -53,10 +53,10 @@ exports.updateUser = (req, res) => {
 };
 
 exports.deleteUser = (req, res) => {
-  const userId = req.body.userId;
+  const id = req.body.id;
 
-  // Call the deleteUser method from your userModel to delete the user
-  UserDAO.deleteUser(userId, (err) => {
+  // Call the deleteUser method from userModel to delete the user
+  UserDAO.deleteUser(id, (err) => {
     if (err) {
       // Handle error
       console.error("Error deleting user:", err);

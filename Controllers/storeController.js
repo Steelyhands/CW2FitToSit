@@ -98,10 +98,10 @@ exports.update_store = function (req, res) {
 };
 
 exports.delete_store = function(req, res) {
-    const id = req.body.id;
+    const userId = req.body.userId;
   
-    // deleteStore
-    Store.deleteStore(id, (err) => {
+    // deleteUser
+    Store.deleteStore(userId, (err) => {
         if (err) {
             // Handle error
             console.error("Error deleting user:", err);

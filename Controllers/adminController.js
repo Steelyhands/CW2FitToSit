@@ -20,7 +20,7 @@ function checkAdmin(req, res, next) {
 }
 
 
-exports.update = [checkAdmin, (req, res, next) => {
+exports.update =  (req, res, next) => {
   const adminId = req.params.id;
   const updatedAdmin = {
     fullName: req.body.fullName,
@@ -38,24 +38,65 @@ exports.update = [checkAdmin, (req, res, next) => {
 
     updatedAdmin.password = hash;
 
-    Admin.updateAdmin(adminId, updatedAdmin)
-      .then(numReplaced => {
-        if (numReplaced === 0) {
-          return res.status(404).send('Admin not found');
-        }
-        res.redirect('/admin');
-      })
-      .catch(err => next(new Error('Internal Server Error')));
+    const loggedInAdminId = req.user.id;
+    Admin.findById(adminId, (err, admin) => {
+      if (err) {
+        res.status(500).send(err);
+        return;
+      }
+      if (!admin) {
+        res.status(404).send('Admin not found');
+        return;
+      }
+      if (admin._id.toString() !== loggedInAdminId && !admin.isAdmin) {
+        res.status(403).send('Unauthorized');
+        return;
+      }
+
+      Admin.updateAdmin(adminId, updatedAdmin)
+        .then(numReplaced => {
+          if (numReplaced === 0) {
+            return res.status(404).send('Admin not found');
+          }
+          res.redirect('/admin');
+        })
+        .catch(err => next(new Error('Internal Server Error')));
+    });
   });
-}];
+};
 
-exports.delete = [checkAdmin, (req, res, next) => {
+exports.delete = (req, res) => {
   const adminId = req.params.id;
+  const loggedInAdminId = req.user.id;
 
-  Admin.removeAdmin(adminId)
-    .then(() => res.redirect('/admin'))
-    .catch(err => next(new Error('Internal Server Error')));
-}];
+  Admin.findById(adminId, (err, admin) => {
+    if (err) {
+      res.status(500).send(err);
+      return;
+    }
+    if (!admin) {
+      res.status(404).send('Admin not found');
+      return;
+    }
+    else if (admin._id.toString() !== loggedInAdminId && !admin.isAdmin) {
+      res.status(403).send('Unauthorized access');
+      return;
+    }
+
+    Admin.delete(adminId, (err, numRemoved) => {
+      if (err) {
+        res.status(500).send(err);
+        return;
+      }
+      if (numRemoved === 0) {
+        res.status(404).send('Admin not found');
+        return;
+      }
+
+      res.redirect('/admin');
+    });
+  });
+};
 
 // Create admin
 exports.createAdmin = (req, res, next) => {

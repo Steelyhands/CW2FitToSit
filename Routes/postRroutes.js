@@ -1,4 +1,21 @@
-const Post = require('../Barnardos/Models/Post'); // Assuming Post class is in '../models/Post'
+const Post = require('../Models/Post'); 
+const express = require('express');
+const router = express.Router();
+const postController = require('./Controllers/postController');
+const Nedb = require('nedb');
+const contactDB = new Nedb({filename:'./db/post.db', autoload: true});
+
+router.get('/products', async (req, res) => {
+  try {
+    const posts = await postController.getAllPosts();
+    const locations = groupPostsByLocation(posts); 
+    res.render('products', { locations });
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+
+
 
 router.get('/new', verify, controller.show_new_entries)
 
@@ -37,4 +54,41 @@ exports.update = (req, res) => {
         res.status(500).send(err);
       });
   };
+  
+  function groupPostsByLocation(posts) {
+    // Create an empty object to store the grouped posts
+    const groupedPosts = {};
+  
+    // Loop through each post
+    posts.forEach(post => {
+      // Use the location of the post as the key
+      const key = post.location;
+  
+      // If this location is not yet in the groupedPosts object, add it
+      if (!groupedPosts[key]) {
+        groupedPosts[key] = [];
+      }
+      // Add the post to the array of posts
+      groupedPosts[key].push(post);
+    });
+  
+    // Convert the groupedPosts object to an array of locations
+    const locations = Object.keys(groupedPosts).map(location => ({
+      location,
+      posts: groupedPosts[location]
+    }));
+  
+    return locations;
+  }
+
+  router.get('/products', async (req, res) => {
+    try {
+      const posts = await postController.getAllPosts();
+      const locations = groupPostsByLocation(posts);
+      res.render('products', { locations });
+    } catch (err) {
+      res.status(500).send(err);
+    }
+  });
+  
   
