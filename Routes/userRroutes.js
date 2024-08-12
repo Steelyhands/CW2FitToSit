@@ -23,3 +23,10 @@ router.delete('/deleteAccount', userController.delete_account);
 router.get('/users', userController.show_users);
 
 module.exports = router;
+
+// handling 404 errors
+//router.use(function (req, res) {
+    //res.status(404);
+    //res.type('text/plain');
+   // res.send('404 Not found.');
+//});

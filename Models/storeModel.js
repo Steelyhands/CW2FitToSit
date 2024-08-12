@@ -5,15 +5,34 @@ const storeDB = new nedb({ filename: './db/store.db', autoload: true });
 
 // Create a new store
 router.post('/stores', (req, res) => {
-    const newStore = req.body;
-    storeDB.insert(newStore, function(err, store) {
+    const { storeName, address, password, storeId } = req.body;
+
+    // Hash the password before storing it
+    bcrypt.hash(password, saltRounds, function(err, hash) {
         if (err) {
             res.status(500).send(err);
             return;
         }
-        res.send(store);
+
+        // Create the new store object
+        const newStore = {
+            storeName: storeName,
+            address: address,
+            password: hash, // Store the hashed password
+            storeId: storeId
+        };
+
+        // Insert the new store into the database
+        storeDB.insert(newStore, function(err, store) {
+            if (err) {
+                res.status(500).send(err);
+                return;
+            }
+            res.send(store);
+        });
     });
 });
+
 
 // Get specific store
 router.get('/stores/:id', (req, res) => {
