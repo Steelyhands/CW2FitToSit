@@ -15,10 +15,16 @@
         /* CSS for the header element */
         .header {
             /* Set the background color to a specific RGB color */
-            background-color: rgb(12,72,64);
+            background-color: rgb(142, 254, 154);
             /* Set the text color to white */
             color: white;
         }
+
+        .nav-item {
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+            width: -webkit-fill-available; /* Full width */
+        }
+
     </style>
 </head>
 <body>
@@ -29,16 +35,17 @@
                 <img src="/images/barnardoslogo.png" alt="Barnardos Logo">
             </div>
         <!-- Navigation menu -->
-<nav class="navbar navbar-expand-lg>
-            <ul class="navbar-nav mr-auto" style="list-style-type: none">
-                <!-- List of navigation links -->
-                <li class="nav-item"><a class="nav-link" href="/home" style="color: white;">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="/about" style="color: white;">About</a></li>
-                <li class="nav-item"><a class="nav-link" href="/contact" style="color: white;">Contact</a></li>
-                <li class="nav-item"><a class="nav-link" href="/login" style="color: white;">Login</a></li>
-                <li class="nav-item"><a class="nav-link" href="/signup" style="color: white;">Sign Up</a></li>
-            </ul>
-        </nav>
+
+<nav class="navbar navbar-expand-lg">
+    <ul class="navbar-nav mr-auto" style="list-style-type: none">
+        <!-- List of navigation links -->
+        <li class="nav-item"><a class="nav-link" href="/home" style="color: white;">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="/about" style="color: white;">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="/contact" style="color: white;">Contact</a></li>
+        <li class="nav-item"><a class="nav-link" href="/login" style="color: white;">Login</a></li>
+        <li class="nav-item"><a class="nav-link" href="/signup" style="color: white;">Sign Up</a></li>
+    </ul>
+</nav>
     </div>
     {{{body}}}
 </body>
