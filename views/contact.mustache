@@ -1,23 +1,41 @@
-{{>header}}
+<!DOCTYPE html>
+<html>
+{{> header}}
 <body>
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1, form {
+            width: 100%;
+            text-align: center;
+        }
+        input[type="text"], textarea {
+            margin: 0 auto;
+            display: block;
+        }
+        #help {
+            width: 60%; 
+            height: 150px; 
+        }
+    </style>
     <h1>Contact Us</h1>
     <div class="container">
         <form method="POST" action="/contact">
-            <label for="help">How can we help?</label>
-            <textarea id="help" name="help" placeholder="Tell us how we can help..."></textarea>
-
             <label for="name">Name</label>
-            <input type="text" id="name" name="name" placeholder="Name..">
-
+                 <input type="text" id="name" name="name" class="form-control" placeholder="Name..">
+            <br>
             <label for="email">Email</label>
-            <input type="text" id="email" name="email" placeholder="Email">
-
-            <label for="phoneNumber">Phone Number</label>
-            <input type="text" id="phoneNumber" name="phoneNumber" placeholder="+44...">
-
-            <input type="submit" value="Send">
+                     <input type="text" id="email" name="email" class="form-control" placeholder="Email">
+            <br>
+            <label for="help">How can we help?</label>
+                    <textarea id="help" name="help" class="form-control" placeholder="Tell us how we can help..."></textarea>
+            <br>
+             <input type="submit" value="Send">
         </form>
     </div>
-    {{>footer}}
+{{> footer}}
 </body>
 </html>

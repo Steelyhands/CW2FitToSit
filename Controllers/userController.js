@@ -5,6 +5,12 @@ const saltRounds = 10; // Define saltRounds
 exports.createUser = (req, res) => {
   const { fullName, email, address, isAdmin, username, password } = req.body;
 
+  // Check if any of the required fields are missing
+  if (!fullName || !email || !address || !username || !password) {
+    res.status(400).send('Error: Missing required fields.');
+    return;
+  }
+
   const newUser = new UserDAO(fullName, email, address, isAdmin, username, password);
 
   UserDAO.create(newUser, (err, user) => {

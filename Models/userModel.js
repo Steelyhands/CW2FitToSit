@@ -15,15 +15,14 @@ class UserDAO {
     }
 
     // Create a new user
-    createUser() {
+    createUser(fullName, email, address, isAdmin, userName, id) {
         const entry = {
-            userName: this.userName,
-            fullName: this.fullName,
-            email: this.email,
-            address: this.address,
-            phoneNumber: this.phoneNumber,
-            userId: this.userId,
-            isAdmin: this.isAdmin,
+            userName: userName,
+            fullName: fullName,
+            email: email,
+            address: address,
+            userId: userId,
+            isAdmin: isAdmin,
         };
             userDB.insert(entry, function(err, newUser) {
                 if (err){ 

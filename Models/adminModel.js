@@ -3,8 +3,8 @@ const adminDB = new nedb({ filename: './db/admin.db', autoload: true });
 const User = require('../Models/userModel');
 
 class Admin extends User {
-    constructor(fullName, email, address, phoneNumber, isAdmin, username, password){
-        super(fullName, email, address, phoneNumber, isAdmin, username, password);
+    constructor(fullName, email, address, isAdmin, username, password){
+        super(fullName, email, address, isAdmin, username, password);
         this.isAdmin = isAdmin;
     }
 

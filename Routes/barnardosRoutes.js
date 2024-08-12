@@ -47,10 +47,10 @@ router.post('/signup', (req, res) => {
     // Here you would typically validate the input data and save the new user to your database
     // For example:
     const user = new User(userId);
-    user.save()
+    user.createUser(userId)
         .then(() => res.status(200).send({ message: 'User created successfully.' }))
         .catch(err => res.status(500).send({ error: err.message }));
-    });
+});
 
 // Export the router for use in other files
 module.exports = router;
