@@ -31,13 +31,6 @@ router.get("/signup", (req, res) => {
     res.render('signup');
 });
 
-// handling 404 errors
-router.use(function (req, res) {
-    res.status(404);
-    res.type('text/plain');
-    res.send('404 Not found.');
-});
-
 // handling internal server errors
 router.use(function (err, req, res, next) {
     res.status(500);

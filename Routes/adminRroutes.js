@@ -26,3 +26,10 @@ router.delete('/deleteAdmin/:id', AdminController.delete);
 router.get('/displayAdmins', AdminController.admin_page);
 
 module.exports = router;
+
+// handling 404 errors
+//router.use(function (req, res) {
+    //res.status(404);
+    //res.type('text/plain');
+   // res.send('404 Not found.');
+//});

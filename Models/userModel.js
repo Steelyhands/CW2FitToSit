@@ -5,12 +5,11 @@ const saltRounds = 10; // Define saltRounds
 
 //creating and initialising UserDAO object
 class UserDAO {
-    constructor(fullName, email, address, phoneNumber, isAdmin, userName, id){
+    constructor(fullName, email, address, isAdmin, userName, id){
         this.userName = userName;
         this.fullName = fullName;
         this.email = email;
         this.address = address;
-        this.phoneNumber = phoneNumber;
         this.id = id;
         this.isAdmin = isAdmin;
     }
